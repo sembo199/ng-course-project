@@ -1,4 +1,6 @@
-# CourseProject
+# Angular - The Complete Guide (Course Project)
+
+This project will contain the course project of the Angular - The Complete Guide course. This app will feature a shopping list with Ingrediënts and a recipe book with recipes. It will show the basics of Angular as a refresher and as a basis for the next sections in the course.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.5.
 
