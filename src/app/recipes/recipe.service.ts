@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from "@angular/core";
+import { Ingredient } from "../shared/ingredient.model";
 import { Recipe } from "./recipe.model";
 
 @Injectable({providedIn: 'root'})
@@ -8,11 +9,20 @@ export class RecipeService {
     new Recipe(
       'Spaghetti Bolognese', 
       'Elke Italiaanse nonna heeft haar eigen bologneserecept.', 
-      'https://static.ah.nl/static/recepten/img_RAM_PRD121467_890x594_JPG.jpg'),
+      'https://static.ah.nl/static/recepten/img_RAM_PRD121467_890x594_JPG.jpg',
+      [
+        new Ingredient('Spaghetti', 1),
+        new Ingredient('Pastasaus', 1)
+      ]),
     new Recipe(
       'Pizza Hawaï', 
       'Pizza met ananas? Ja! Deze is voor alle pizza Hawaï lovers.', 
-      'https://static.ah.nl/static/recepten/img_RAM_PRD134303_890x594_JPG.jpg')
+      'https://static.ah.nl/static/recepten/img_RAM_PRD134303_890x594_JPG.jpg',
+      [
+        new Ingredient('Pizzabodem', 1),
+        new Ingredient('Ananas', 1),
+        new Ingredient('Tomatensaus', 1)
+      ])
   ];
 
   getRecipes(): Recipe[] {
