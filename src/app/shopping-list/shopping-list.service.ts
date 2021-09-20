@@ -1,9 +1,10 @@
-import { EventEmitter, Injectable, Output } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Ingredient } from "../shared/ingredient.model";
 
 @Injectable({providedIn: 'root'})
 export class ShoppingListService {
-  @Output() ingredientsChanged = new EventEmitter<Ingredient[]>();
+  ingredientsChanged = new Subject<Ingredient[]>();
   private ingredients: Ingredient[] = [
     new Ingredient('Spaghetti', 1),
     new Ingredient('Pasta saus', 1),
@@ -16,10 +17,11 @@ export class ShoppingListService {
 
   addIngredient(ingredient: Ingredient) {
     this.ingredients.push(ingredient);
-    this.ingredientsChanged.emit([...this.ingredients]);
+    this.ingredientsChanged.next([...this.ingredients]);
   }
 
   addIngredients(newIngredients: Ingredient[]) {
     this.ingredients = [...this.ingredients, ...newIngredients];
+    this.ingredientsChanged.next([...this.ingredients]);
   }
 }
