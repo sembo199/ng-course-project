@@ -7,7 +7,6 @@ export class RecipeService {
   recipeSelected = new EventEmitter<Recipe>();
   private recipes: Recipe[] = [
     new Recipe(
-      0,
       'Spaghetti Bolognese', 
       'Elke Italiaanse nonna heeft haar eigen bologneserecept.', 
       'https://static.ah.nl/static/recepten/img_RAM_PRD121467_890x594_JPG.jpg',
@@ -16,7 +15,6 @@ export class RecipeService {
         new Ingredient('Pastasaus', 1)
       ]),
     new Recipe(
-      1,
       'Pizza Hawaï', 
       'Pizza met ananas? Ja! Deze is voor alle pizza Hawaï lovers.', 
       'https://static.ah.nl/static/recepten/img_RAM_PRD134303_890x594_JPG.jpg',
@@ -32,8 +30,8 @@ export class RecipeService {
     return [...this.recipes];
   }
 
-  getRecipe(id: number): Recipe {
-    const recipe = this.recipes.find((recipe) => recipe.id === +id);
-    return recipe;
+  getRecipe(index: number): Recipe {
+    console.log(index);
+    return this.recipes[index];
   }
 }
