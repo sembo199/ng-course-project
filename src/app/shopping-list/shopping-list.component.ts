@@ -10,6 +10,7 @@ import { ShoppingListService } from './shopping-list.service';
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
   ingredients: Ingredient[];
+  selectedIngredient: number;
   private slSubscription: Subscription;
 
   constructor(private slService: ShoppingListService) { }
@@ -18,11 +19,13 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
     this.ingredients = this.slService.getIngredients();
     this.slSubscription = this.slService.ingredientsChanged
       .subscribe((ingredients: Ingredient[]) => {
+        this.selectedIngredient = null;
         this.ingredients = ingredients;
       });
   }
 
   onEditItem(index: number) {
+    this.selectedIngredient = index;
     this.slService.startedEditing.next(index);
   }
 
