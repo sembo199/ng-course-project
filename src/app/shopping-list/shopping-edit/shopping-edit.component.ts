@@ -39,7 +39,11 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
         form.value.name,
         form.value.amount
       );
-      this.slService.addIngredient(ingredient);
+      if (this.editMode) {
+        this.slService.updateIngredient(this.editedItemIndex, ingredient);
+      } else {
+        this.slService.addIngredient(ingredient);
+      }
     } else {
       alert('Please check the fields.')
     }
