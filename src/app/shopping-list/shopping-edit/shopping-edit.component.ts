@@ -43,8 +43,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       } else {
         this.slService.addIngredient(ingredient);
       }
-      this.editMode = false;
-      form.reset();
+      this.onClear();
     } else {
       alert('Please check the fields.')
     }
@@ -53,6 +52,11 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onClear() {
     this.slForm.reset();
     this.editMode = false;
+  }
+
+  onDelete() {
+    this.slService.deleteIngredient(this.editedItemIndex);
+    this.onClear();
   }
 
   ngOnDestroy() {
