@@ -77,7 +77,11 @@
       </div>
       <div class="row" style="padding-top: 1.5rem;">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success" style="margin-right: 1.5rem;">Save</button>
+          <button 
+            type="submit" 
+            class="btn btn-success" 
+            style="margin-right: 1.5rem;"
+            [disabled]="recipeForm.invalid">Save</button>
           <button type="button" class="btn btn-danger">Cancel</button>
         </div>
       </div>
