@@ -26,6 +26,11 @@ export class RecipeService {
       ])
   ];
 
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanged.next([...this.recipes]);
+  }
+
   getRecipes(): Recipe[] {
     // ES6 way of returning a copy of the recipes.
     return [...this.recipes];

@@ -23,4 +23,11 @@ export class DataStorageService {
       console.log(response);
     });
   }
+
+  fetchRecipes() {
+    this.http.get(this.recipeUrl)
+      .subscribe((recipes: Recipe[]) => {
+        this.recipeService.setRecipes(recipes);
+      });
+  }
 }
