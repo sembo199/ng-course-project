@@ -33,7 +33,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form);
     if (form.valid) {
       const ingredient: Ingredient = new Ingredient(
         form.value.name,
@@ -44,9 +43,17 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       } else {
         this.slService.addIngredient(ingredient);
       }
+      this.editMode = false;
+      form.reset();
     } else {
       alert('Please check the fields.')
     }
+  }
+
+  onClearForm() {
+    this.editMode = false;
+    this.editedItemIndex, this.editedItem = null;
+    this.slForm.reset();
   }
 
   ngOnDestroy() {
