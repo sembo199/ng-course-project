@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <h1>{{ isLoginMode ? 'Sign In' : 'Sign Up' }}</h1>
     <form (ngSubmit)="onSubmit()" #authForm="ngForm" >
       <div class="form-group">
         <label for="email">Email</label>
@@ -27,15 +28,19 @@
           minlength="6">
           <span class="help-block" *ngIf="password.invalid && password.touched">Please fill in a valid password. Minimum length is 6 characters.</span>
       </div>
+      <div class="alert alert-danger" *ngIf="error">
+        <p>{{ error }}</p>
+      </div>
       <div class="form-group">
         <button 
           class="btn btn-primary" 
           type="submit"
-          [disabled]="authForm.invalid">
-          {{ isLoginMode ? 'Sign In' : 'Sign Up'  }}
+          [disabled]="authForm.invalid || isLoading">
+          <span>{{ isLoginMode ? 'Sign In' : 'Sign Up'  }} <app-loading-spinner *ngIf="isLoading"></app-loading-spinner></span>
         </button> | 
         <button 
           class="btn btn-primary" 
+          [disabled]="isLoading"
           (click)="onSwitchMode()" 
           type="button">
           {{ isLoginMode ? 'Not yet' : 'Already' }} a user?

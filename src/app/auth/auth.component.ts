@@ -9,6 +9,8 @@ import { AuthService } from "./auth.service";
 })
 export class AuthComponent {
   isLoginMode = true;
+  isLoading = false;
+  error: string = null;
   @ViewChild('authForm') authForm: NgForm;
 
   constructor(
@@ -25,14 +27,19 @@ export class AuthComponent {
     }
     const email = this.authForm.value.email;
     const password = this.authForm.value.password;
+    this.isLoading = true;
     if (!this.isLoginMode) {
       this.authService.signUp(email, password)
         .subscribe(data => {
+          this.isLoading = false;
           console.log(data);
         }, error => {
+          this.isLoading = false;
           console.log(error);
+          this.error = 'An error occurred!';
         });
     } else {
+      this.isLoading = false;
       console.log('Is login mode');
     }
     this.authForm.reset();
