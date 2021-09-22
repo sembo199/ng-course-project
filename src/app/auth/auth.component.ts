@@ -40,12 +40,13 @@ export class AuthComponent {
 
     authObs.subscribe(data => {
       console.log(data);
+      this.error = null;
       this.isLoading = false;
     }, errorMsg => {
       this.error = errorMsg;
       this.isLoading = false;
     });
-    
+
     this.authForm.reset();
   }
 }

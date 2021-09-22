@@ -1,7 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError } from "rxjs/operators";
-import { throwError } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { ApiKeyService } from "./api-key.service";
 
 export interface AuthResponseData {
@@ -32,9 +32,22 @@ export class AuthService {
         password,
         returnSecureToken: true
       }
-    ).pipe(
-      catchError(errorRes => {
-        let errorMessage = 'An unknown error occurred!';
+    ).pipe(catchError(this.handleError));
+  }
+
+  signIn(email: string, password: string) {
+    return this.http.post<AuthResponseData>(
+      this.signInUrl + this.apiKeyService.getApiKey(),
+      {
+        email,
+        password,
+        returnSecureToken: true
+      }
+    ).pipe(catchError(this.handleError));
+  }
+
+  private handleError(errorRes: HttpErrorResponse): Observable<any>{
+    let errorMessage = 'An unknown error occurred!';
         if (!errorRes.error || !errorRes.error.error) {
           return throwError(errorMessage);
         }
@@ -48,27 +61,6 @@ export class AuthService {
           case 'TOO_MANY_ATTEMPTS_TRY_LATER':
             errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
             break;
-        }
-        return throwError(errorMessage);
-      })
-    );
-  }
-
-  signIn(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      this.signInUrl + this.apiKeyService.getApiKey(),
-      {
-        email,
-        password,
-        returnSecureToken: true
-      }
-    ).pipe(
-      catchError(errorRes => {
-        let errorMessage = 'An unknown error occurred!';
-        if (!errorRes.error || !errorRes.error.error) {
-          return throwError(errorMessage);
-        }
-        switch (errorRes.error.error.message) {
           case 'EMAIL_NOT_FOUND':
             errorMessage = 'There is no user record corresponding to this identifier. The user may have been deleted.';
             break;
@@ -80,7 +72,5 @@ export class AuthService {
             break;
         }
         return throwError(errorMessage);
-      })
-    );
   }
 }
