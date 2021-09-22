@@ -1,5 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthResponseData, AuthService } from "./auth.service";
 
@@ -15,7 +16,8 @@ export class AuthComponent {
   @ViewChild('authForm') authForm: NgForm;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   onSwitchMode() {
@@ -39,9 +41,9 @@ export class AuthComponent {
     }
 
     authObs.subscribe(data => {
-      console.log(data);
       this.error = null;
       this.isLoading = false;
+      this.router.navigate(['/recipes']);
     }, errorMsg => {
       this.error = errorMsg;
       this.isLoading = false;
