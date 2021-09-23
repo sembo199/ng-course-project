@@ -28,7 +28,8 @@
           minlength="6">
           <span class="help-block" *ngIf="password.invalid && password.touched">Please fill in a valid password. Minimum length is 6 characters.</span>
       </div>
-      <app-alert [message]="error" *ngIf="error"></app-alert>
+      <!-- This approach is strongly recommended over imperitive approach -->
+      <app-alert [message]="error" (close)="onHandleError()" *ngIf="error"></app-alert>
       <!-- <div class="alert alert-danger" *ngIf="error">
         <p>{{ error }}</p>
       </div> -->
