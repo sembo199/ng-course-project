@@ -3,6 +3,7 @@ import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AlertComponent } from "../shared/alert/alert.component";
+import { PlaceholderDirective } from "../shared/placeholder/placeholder.directive";
 import { AuthResponseData, AuthService } from "./auth.service";
 
 @Component({
@@ -15,6 +16,7 @@ export class AuthComponent {
   isLoading = false;
   error: string = null;
   @ViewChild('authForm') authForm: NgForm;
+  @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
 
   constructor(
     private authService: AuthService,
@@ -64,6 +66,8 @@ export class AuthComponent {
     // const alertCmp = new AlertComponent();
 
     const alertComponentFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
-    
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
+    hostViewContainerRef.createComponent(alertComponentFactory);
   }
 }
