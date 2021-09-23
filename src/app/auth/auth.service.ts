@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { ApiKeyService } from "./api-key.service";
 import { User } from "./user.model";
 import { Router } from "@angular/router";
+import { environment } from '../../environments/environment';
 
 export interface AuthResponseData {
   kind?: string;
@@ -31,7 +32,7 @@ export class AuthService {
 
   signUp(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      this.signUpUrl + this.apiKeyService.getApiKey(),
+      this.signUpUrl + environment.firebaseApiKey,
       {
         email,
         password,
@@ -44,7 +45,7 @@ export class AuthService {
 
   signIn(email: string, password: string) {
     return this.http.post<AuthResponseData>(
-      this.signInUrl + this.apiKeyService.getApiKey(),
+      this.signInUrl + environment.firebaseApiKey,
       {
         email,
         password,
