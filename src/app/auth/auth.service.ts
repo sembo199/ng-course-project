@@ -4,6 +4,7 @@ import { catchError, tap } from "rxjs/operators";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { ApiKeyService } from "./api-key.service";
 import { User } from "./user.model";
+import { Router } from "@angular/router";
 
 export interface AuthResponseData {
   kind?: string;
@@ -23,7 +24,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private apiKeyService: ApiKeyService
+    private apiKeyService: ApiKeyService,
+    private router: Router
   ) {}
 
   signUp(email: string, password: string) {
@@ -50,6 +52,11 @@ export class AuthService {
     ).pipe(catchError(this.handleError), tap(resData => {
       this.handleAuthentication(resData.email, resData.localId, resData.idToken, resData.expiresIn);
     }));
+  }
+
+  signOut() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
   }
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
