@@ -9,6 +9,7 @@ import { RecipeStartComponent } from "./recipe-start/recipe-start.component";
 import { RecipesRoutingModule } from "./recipes-routing.module";
 import { RecipesComponent } from "./recipes.component";
 
+// Removed export recipe components as we are no longer using them in app module.
 @NgModule({
   declarations: [
     RecipesComponent,
@@ -22,14 +23,6 @@ import { RecipesComponent } from "./recipes.component";
     CommonModule,
     RecipesRoutingModule,
     ReactiveFormsModule
-  ],
-  exports: [
-    RecipesComponent,
-    RecipeEditComponent,
-    RecipeDetailComponent,
-    RecipeListComponent,
-    RecipeItemComponent,
-    RecipeStartComponent
   ]
 })
 export class RecipesModule {}
