@@ -13,7 +13,7 @@ import { AuthComponent } from "./auth.component";
     SharedModule,
     RouterModule.forChild([
       { path: 'auth', component: AuthComponent },
-      { path: '**', redirectTo: 'auth' }
+      // { path: '**', redirectTo: 'auth' }
     ])
   ],
   exports: [
