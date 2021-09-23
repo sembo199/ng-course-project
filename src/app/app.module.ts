@@ -6,6 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { LoggingService } from './logging.service';
 
 // Bugfix: You can no longer import RecipesModule here
 // Because it imports it in the routes, it would be a duplicate import which is not allowed.
@@ -21,6 +22,7 @@ import { CoreModule } from './core.module';
     SharedModule,
     CoreModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  // providers: [LoggingService]
 })
 export class AppModule { }
