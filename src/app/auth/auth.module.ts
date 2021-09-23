@@ -12,8 +12,7 @@ import { AuthComponent } from "./auth.component";
     FormsModule,
     SharedModule,
     RouterModule.forChild([
-      { path: 'auth', component: AuthComponent },
-      // { path: '**', redirectTo: 'auth' }
+      { path: '', component: AuthComponent }
     ])
   ],
   exports: [
