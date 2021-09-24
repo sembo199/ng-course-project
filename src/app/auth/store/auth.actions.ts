@@ -16,4 +16,10 @@ export class SignOut implements Action {
   readonly type = SIGN_OUT;
 }
 
+export class SignInStart implements Action {
+  readonly type = SIGN_IN_START;
+
+  constructor(public payload: { email: string, password: string }) {}
+}
+
 export type AuthActions = SignIn | SignOut;
