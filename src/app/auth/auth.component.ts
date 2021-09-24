@@ -25,7 +25,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
     private componentFactoryResolver: ComponentFactoryResolver,
     private store: Store<fromApp.AppState>
   ) {}
@@ -53,24 +52,13 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     let authObs: Observable<AuthResponseData>;
 
-    this.isLoading = true;
     if (!this.isLoginMode) {
-      authObs = this.authService.signUp(email, password);
+      this.store.dispatch(new AuthActions.SignUpStart({email, password}));
     } else {
       // authObs = this.authService.signIn(email, password);
       console.log('Dispatch Sign in start');
       this.store.dispatch(new AuthActions.SignInStart({email, password}));
     }
-
-    // authObs.subscribe(data => {
-    //   this.error = null;
-    //   this.isLoading = false;
-    //   this.router.navigate(['/recipes']);
-    // }, errorMsg => {
-    //   this.error = errorMsg;
-    //   this.showErrorAlert(errorMsg);
-    //   this.isLoading = false;
-    // });
 
     this.authForm.reset();
   }

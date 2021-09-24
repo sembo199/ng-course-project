@@ -17,61 +17,87 @@ export interface AuthResponseData {
   localId: string;
 }
 
+const handleAuthentication = (email: string, userId: string, token: string, expiresIn: number) => {
+  const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
+  // Map automatically returns an observable so no need for of()
+  return new AuthActions.AuthenticateSuccess({email, userId, token, expirationDate});
+};
+
+const handleError = (errorRes: any) => {
+  // Does not automatically return observable, so use of()
+  let errorMessage = 'An unknown error occurred!';
+  if (!errorRes.error || !errorRes.error.error) {
+    return of(new AuthActions.AuthenticateFail(errorMessage));
+  }
+  switch (errorRes.error.error.message) {
+    case 'EMAIL_EXISTS':
+      errorMessage = 'The email address is already in use by another account.';
+      break;
+    case 'OPERATION_NOT_ALLOWED':
+      errorMessage = 'Password sign-in is disabled for this project.';
+      break;
+    case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+      errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+      break;
+    case 'EMAIL_NOT_FOUND':
+      errorMessage = 'There is no user record corresponding to this identifier. The user may have been deleted.';
+      break;
+    case 'INVALID_PASSWORD':
+      errorMessage = ' The password is invalid or the user does not have a password.';
+      break;
+    case 'USER_DISABLED':
+      errorMessage = 'The user account has been disabled by an administrator.';
+      break;
+  }
+  return of(new AuthActions.AuthenticateFail(errorMessage));
+};
+
 @Injectable()
 export class AuthEffects {
   private signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
   private signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
 
+
+
   @Effect()
   authSignUp = this.actions$.pipe(
-
+    ofType(AuthActions.SIGN_UP_START),
+    switchMap((signUpAction: AuthActions.SignUpStart) => {
+      return this.http.post<AuthResponseData>(
+        this.signUpUrl + environment.firebaseApiKey,
+        {
+          email: signUpAction.payload.email,
+          password: signUpAction.payload.password,
+          returnSecureToken: true
+        }
+      ).pipe(
+        map(resData => {
+          return handleAuthentication(resData.email, resData.localId, resData.idtoken, +resData.expiresIn);
+        }),
+        catchError(errorRes => {
+          return handleError(errorRes);
+        })
+      );
+    })
   );
 
   @Effect()
   authSignIn = this.actions$.pipe(
     ofType(AuthActions.SIGN_IN_START),
-    switchMap((authData: AuthActions.SignInStart) => {
+    switchMap((signInAction: AuthActions.SignInStart) => {
       return this.http.post<AuthResponseData>(
         this.signInUrl + environment.firebaseApiKey,
         {
-          email: authData.payload.email,
-          password: authData.payload.password,
+          email: signInAction.payload.email,
+          password: signInAction.payload.password,
           returnSecureToken: true
         }
       ).pipe(
         map(resData => {
-          const expirationDate = new Date(new Date().getTime() + (+resData.expiresIn * 1000));
-          console.log('Observable with action: Sign in');
-          // Map automatically returns an observable so no need for of()
-          return new AuthActions.AuthenticateSuccess({email: resData.email, userId: resData.localId, token: resData.idtoken, expirationDate: expirationDate});
+          return handleAuthentication(resData.email, resData.localId, resData.idtoken, +resData.expiresIn);
         }),
         catchError(errorRes => {
-          // Does not automatically return observable, so use of()
-          let errorMessage = 'An unknown error occurred!';
-          if (!errorRes.error || !errorRes.error.error) {
-            return of(new AuthActions.AuthenticateFail(errorMessage));
-          }
-          switch (errorRes.error.error.message) {
-            case 'EMAIL_EXISTS':
-              errorMessage = 'The email address is already in use by another account.';
-              break;
-            case 'OPERATION_NOT_ALLOWED':
-              errorMessage = 'Password sign-in is disabled for this project.';
-              break;
-            case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-              errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
-              break;
-            case 'EMAIL_NOT_FOUND':
-              errorMessage = 'There is no user record corresponding to this identifier. The user may have been deleted.';
-              break;
-            case 'INVALID_PASSWORD':
-              errorMessage = ' The password is invalid or the user does not have a password.';
-              break;
-            case 'USER_DISABLED':
-              errorMessage = 'The user account has been disabled by an administrator.';
-              break;
-          }
-          return of(new AuthActions.AuthenticateFail(errorMessage));
+          return handleError(errorRes);
         })
       );
     }),
