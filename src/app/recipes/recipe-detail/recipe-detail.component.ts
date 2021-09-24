@@ -6,6 +6,7 @@ import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
 import { Ingredient } from 'src/app/shared/ingredient.model';
+import * as fromShoppingList from '../../shopping-list/store/shopping-list.reducer';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -17,7 +18,7 @@ export class RecipeDetailComponent implements OnInit {
   id: number;
 
   constructor(
-    private store: Store<{ingredients: Ingredient[]}>,
+    private store: Store<fromShoppingList.AppState>,
     private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router
