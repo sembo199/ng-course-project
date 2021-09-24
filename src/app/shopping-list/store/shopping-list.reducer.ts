@@ -53,8 +53,21 @@ export function shoppingListReducer(
       return {
         ...state,
         ingredients: state.ingredients.filter((ingredient, index) => {
+          console.log('Remove ' + index + ' if equal to ' + action.payload);
           return index !== action.payload ? true : false;
         })
+      };
+    case ShoppingListActions.START_EDIT:
+      return {
+        ...state,
+        editedIngredient: { ...state.ingredients[action.payload] },
+        editedIngredientIndex: action.payload
+      };
+    case ShoppingListActions.STOP_EDIT:
+      return {
+        ...state,
+        editedIngredient: null,
+        editedIngredientIndex: -1
       };
     default:
       return state;
