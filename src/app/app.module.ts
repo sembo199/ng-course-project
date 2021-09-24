@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+import * as fromApp from './store/app.reducer';
 
 // Bugfix: You can no longer import RecipesModule here
 // Because it imports it in the routes, it would be a duplicate import which is not allowed.
@@ -20,9 +20,7 @@ import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({
-      shoppingList: shoppingListReducer
-    }),
+    StoreModule.forRoot(fromApp.appReducer),
     SharedModule,
     CoreModule
   ],
