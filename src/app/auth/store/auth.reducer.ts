@@ -10,6 +10,7 @@ const initialState = {
 }
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
+  console.log(action);
   switch(action.type) {
     case AuthActions.SIGN_IN:
       const user = new User(
@@ -28,6 +29,14 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         user: null
       };
     default: 
+      /** IMPORTANT:
+       * 
+       *  This code will run the first time, so setting the state in the default case is important!
+       *  Any action you dispatch reaches all reducers.
+       *  This has an important implication: 
+       *    - Always copy the initial state with ...state.
+       *    - Return default state.
+       */
       return state;
   }
 }

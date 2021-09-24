@@ -1,8 +1,9 @@
 import { Action } from "@ngrx/store";
 import { User } from "../user.model";
 
-export const SIGN_IN = 'SIGN_IN';
-export const SIGN_OUT = 'SIGN_OUT';
+// Identifiers must be unique!
+export const SIGN_IN = '[Auth] SIGN_IN';
+export const SIGN_OUT = '[Auth] SIGN_OUT';
 
 export class SignIn implements Action {
   readonly type = SIGN_IN;
