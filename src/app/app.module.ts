@@ -8,6 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import * as fromApp from './store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
 
 // Bugfix: You can no longer import RecipesModule here
 // Because it imports it in the routes, it would be a duplicate import which is not allowed.
@@ -21,6 +23,7 @@ import * as fromApp from './store/app.reducer';
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     SharedModule,
     CoreModule
   ],
