@@ -33,10 +33,12 @@ export class AuthEffects {
       ).pipe(
         map(resData => {
           const expirationDate = new Date(new Date().getTime() + (+resData.expiresIn * 1000));
-          return of(new AuthActions.SignIn({email: resData.email, userId: resData.localId, token: resData.idtoken, expirationDate: expirationDate}));
+          console.log('Observable with action: Sign in');
+          return new AuthActions.SignIn({email: resData.email, userId: resData.localId, token: resData.idtoken, expirationDate: expirationDate});
         }),
         catchError(error => {
           // ...
+          console.log("Error???");
           return of();
         })
       );
