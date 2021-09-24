@@ -34,32 +34,6 @@ export class AuthService {
     private store: Store<fromApp.AppState>
   ) {}
 
-  signUp(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      this.signUpUrl + environment.firebaseApiKey,
-      {
-        email,
-        password,
-        returnSecureToken: true
-      }
-    ).pipe(catchError(this.handleError), tap(resData => {
-      this.handleAuthentication(resData.email, resData.localId, resData.idToken, resData.expiresIn);
-    }));
-  }
-
-  signIn(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      this.signInUrl + environment.firebaseApiKey,
-      {
-        email,
-        password,
-        returnSecureToken: true
-      }
-    ).pipe(catchError(this.handleError), tap(resData => {
-      this.handleAuthentication(resData.email, resData.localId, resData.idToken, resData.expiresIn);
-    }));
-  }
-
   autoLogin() {
     const userData: {
       email: string,
@@ -82,7 +56,6 @@ export class AuthService {
   signOut() {
     // this.user.next(null);
     this.store.dispatch(new AuthActions.SignOut());
-    this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);

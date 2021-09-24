@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
 export interface AuthResponseData {
   kind?: string;
   registered?: boolean;
-  idtoken: string;
+  idToken: string;
   email: string;
   refreshToken: string;
   expiresIn: string;
@@ -72,7 +72,7 @@ export class AuthEffects {
         }
       ).pipe(
         map(resData => {
-          return handleAuthentication(resData.email, resData.localId, resData.idtoken, +resData.expiresIn);
+          return handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
         }),
         catchError(errorRes => {
           return handleError(errorRes);
@@ -94,7 +94,7 @@ export class AuthEffects {
         }
       ).pipe(
         map(resData => {
-          return handleAuthentication(resData.email, resData.localId, resData.idtoken, +resData.expiresIn);
+          return handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
         }),
         catchError(errorRes => {
           return handleError(errorRes);
@@ -104,8 +104,8 @@ export class AuthEffects {
   );
 
   @Effect({dispatch: false})
-  authSuccess = this.actions$.pipe(
-    ofType(AuthActions.AUTHENTICATE_SUCCESS),
+  authRedirect = this.actions$.pipe(
+    ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.SIGN_OUT),
     tap(() => {
       this.router.navigate(['/']);
     })

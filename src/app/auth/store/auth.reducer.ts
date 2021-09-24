@@ -17,7 +17,6 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
   console.log(action);
   switch(action.type) {
     case AuthActions.AUTHENTICATE_SUCCESS:
-      console.log('IN Case: Sign in');
       const user = new User(
         action.payload.email,
         action.payload.userId,
@@ -36,7 +35,7 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         user: null
       };
     case AuthActions.SIGN_IN_START:
-      console.log('IN Case: Sign in start');
+    case AuthActions.SIGN_UP_START:
       return {
         ...state,
         authError: null,
@@ -49,6 +48,11 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
         authError: action.payload,
         loading: false
       }
+    case AuthActions.CLEAR_ERROR:
+      return {
+        ...state,
+        authError: null
+      };
     default: 
       /** IMPORTANT:
        * 
