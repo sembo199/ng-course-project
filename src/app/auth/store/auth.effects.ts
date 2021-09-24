@@ -19,7 +19,14 @@ export interface AuthResponseData {
 
 @Injectable()
 export class AuthEffects {
+  private signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
   private signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
+
+  @Effect()
+  authSignUp = this.actions$.pipe(
+
+  );
+
   @Effect()
   authSignIn = this.actions$.pipe(
     ofType(AuthActions.SIGN_IN_START),
@@ -36,13 +43,13 @@ export class AuthEffects {
           const expirationDate = new Date(new Date().getTime() + (+resData.expiresIn * 1000));
           console.log('Observable with action: Sign in');
           // Map automatically returns an observable so no need for of()
-          return new AuthActions.SignIn({email: resData.email, userId: resData.localId, token: resData.idtoken, expirationDate: expirationDate});
+          return new AuthActions.AuthenticateSuccess({email: resData.email, userId: resData.localId, token: resData.idtoken, expirationDate: expirationDate});
         }),
         catchError(errorRes => {
           // Does not automatically return observable, so use of()
           let errorMessage = 'An unknown error occurred!';
           if (!errorRes.error || !errorRes.error.error) {
-            return of(new AuthActions.SignInFail(errorMessage));
+            return of(new AuthActions.AuthenticateFail(errorMessage));
           }
           switch (errorRes.error.error.message) {
             case 'EMAIL_EXISTS':
@@ -64,7 +71,7 @@ export class AuthEffects {
               errorMessage = 'The user account has been disabled by an administrator.';
               break;
           }
-          return of(new AuthActions.SignInFail(errorMessage));
+          return of(new AuthActions.AuthenticateFail(errorMessage));
         })
       );
     }),
@@ -72,7 +79,7 @@ export class AuthEffects {
 
   @Effect({dispatch: false})
   authSuccess = this.actions$.pipe(
-    ofType(AuthActions.SIGN_IN),
+    ofType(AuthActions.AUTHENTICATE_SUCCESS),
     tap(() => {
       this.router.navigate(['/']);
     })

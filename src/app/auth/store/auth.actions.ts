@@ -3,8 +3,9 @@ import { User } from "../user.model";
 
 // Identifiers must be unique!
 export const SIGN_IN_START = '[Auth] SIGN_IN_START';
-export const SIGN_IN = '[Auth] SIGN_IN';
-export const SIGN_IN_FAIL = '[Auth] SIGN_IN_FAIL'
+export const AUTHENTICATE_SUCCESS = '[Auth] AUTHENTICATE_SUCCESS';
+export const AUTHENTICATE_FAIL = '[Auth] AUTHENTICATE_FAIL'
+export const SIGN_UP_START = '[Auth] SIGN_UP_START';
 export const SIGN_OUT = '[Auth] SIGN_OUT';
 
 export class SignInStart implements Action {
@@ -13,14 +14,14 @@ export class SignInStart implements Action {
   constructor(public payload: { email: string, password: string }) {}
 }
 
-export class SignIn implements Action {
-  readonly type = SIGN_IN;
+export class AuthenticateSuccess implements Action {
+  readonly type = AUTHENTICATE_SUCCESS;
 
   constructor(public payload: {email: string, userId: string, token: string, expirationDate: Date}) {}
 }
 
-export class SignInFail implements Action {
-  readonly type = SIGN_IN_FAIL;
+export class AuthenticateFail implements Action {
+  readonly type = AUTHENTICATE_FAIL;
 
   constructor(public payload: string) {}
 }
@@ -29,4 +30,10 @@ export class SignOut implements Action {
   readonly type = SIGN_OUT;
 }
 
-export type AuthActions = SignInStart | SignIn | SignInFail | SignOut;
+export class SignUpStart implements Action {
+  readonly type = SIGN_UP_START;
+
+  constructor(public payload: { email: string, password: string }) {}
+}
+
+export type AuthActions = SignInStart | AuthenticateSuccess | AuthenticateFail | SignUpStart | SignOut;
