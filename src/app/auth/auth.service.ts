@@ -24,7 +24,7 @@ export interface AuthResponseData {
 export class AuthService {
   private signUpUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
   private signInUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
-  user = new BehaviorSubject<User>(null);
+  // user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
   constructor(
