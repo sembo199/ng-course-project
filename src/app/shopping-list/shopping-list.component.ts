@@ -27,6 +27,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
         console.log(data);
       })
     );
+    // this.store.select('shoppingList').subscribe();
     this.loggingService.printLog("Hello from Shopping List Component");
   }
 
