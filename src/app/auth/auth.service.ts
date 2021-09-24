@@ -6,6 +6,9 @@ import { ApiKeyService } from "./api-key.service";
 import { User } from "./user.model";
 import { Router } from "@angular/router";
 import { environment } from '../../environments/environment';
+import { Store } from "@ngrx/store";
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 export interface AuthResponseData {
   kind?: string;
@@ -27,7 +30,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private apiKeyService: ApiKeyService,
-    private router: Router
+    private router: Router,
+    private store: Store<fromApp.AppState>
   ) {}
 
   signUp(email: string, password: string) {
@@ -68,14 +72,16 @@ export class AuthService {
     }
     const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
     if (loadedUser.token) {
-      this.user.next(loadedUser);
+      // this.user.next(loadedUser);
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+      this.store.dispatch(new AuthActions.SignIn({email: loadedUser.email, userId: loadedUser.id, token: loadedUser.token, expirationDate: new Date(userData._tokenExpirationDate)}))
       this.autoSignOut(expirationDuration);
     }
   }
 
   signOut() {
-    this.user.next(null);
+    // this.user.next(null);
+    this.store.dispatch(new AuthActions.SignOut());
     this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) {
@@ -94,9 +100,10 @@ export class AuthService {
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
     const user = new User(email, userId, token, expirationDate);
-    // Store token in storage
-    this.user.next(user);
+    // this.user.next(user);
+    this.store.dispatch(new AuthActions.SignIn({email, userId, token, expirationDate}));
     this.autoSignOut(expiresIn * 1000);
+    // Store token in storage
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
