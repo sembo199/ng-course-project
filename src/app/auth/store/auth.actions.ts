@@ -2,6 +2,7 @@ import { Action } from "@ngrx/store";
 import { User } from "../user.model";
 
 // Identifiers must be unique!
+export const SIGN_IN_START = '[Auth] SIGN_IN_START';
 export const SIGN_IN = '[Auth] SIGN_IN';
 export const SIGN_OUT = '[Auth] SIGN_OUT';
 
