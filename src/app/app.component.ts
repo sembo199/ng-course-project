@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { LoggingService } from './logging.service';
 import * as fromApp from './store/app.reducer';

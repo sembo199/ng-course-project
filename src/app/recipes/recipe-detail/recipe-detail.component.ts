@@ -6,15 +6,29 @@ import * as ShoppingListActions from '../../shopping-list/store/shopping-list.ac
 import * as RecipeActions from '../store/recipe.actions';
 import * as fromApp from '../../store/app.reducer';
 import { map, switchMap } from 'rxjs/operators';
+import { state, style, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.css']
+  styleUrls: ['./recipe-detail.component.css'],
+  animations: [
+    trigger('divState', [
+      state('normal', style({
+        'background-color': 'red',
+        'transform': 'translateX(0)'
+      })),
+      state('highlighted', style({
+        'background-color': 'green',
+        'transform': 'translatex(100px)'
+      }))
+    ]) 
+  ]
 })
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id: number;
+  state = 'normal';
 
   constructor(
     private store: Store<fromApp.AppState>,
