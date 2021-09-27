@@ -7,7 +7,7 @@ import * as fromApp from '../../store/app.reducer';
 import * as RecipeActions from '../store/recipe.actions';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { animate, group, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -60,6 +60,18 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
             offset: 1
           }),
         ]))
+      ]),
+      transition('* => void', [
+        group([
+        animate(1000, style({
+          backgroundColor: 'red',
+          paddingTop: '1rem',
+          paddingBottom: '1rem'
+        })),
+        animate(2000, style({
+          transform: 'translateX(100px)',
+          opacity: 0
+        }))])
       ])
     ])
   ]
