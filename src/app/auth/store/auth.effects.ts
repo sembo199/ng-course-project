@@ -6,6 +6,7 @@ import { environment } from "../../../environments/environment";
 import { of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { User } from "../user.model";
 
 export interface AuthResponseData {
   kind?: string;
@@ -19,6 +20,8 @@ export interface AuthResponseData {
 
 const handleAuthentication = (email: string, userId: string, token: string, expiresIn: number) => {
   const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
+  const user = new User(email, userId, token, expirationDate);
+  localStorage.setItem('userData', JSON.stringify(user));
   // Map automatically returns an observable so no need for of()
   return new AuthActions.AuthenticateSuccess({email, userId, token, expirationDate});
 };
@@ -110,6 +113,47 @@ export class AuthEffects {
       this.router.navigate(['/']);
     })
   );
+
+  @Effect()
+  authAutoSignIn = this.actions$.pipe(
+    ofType(AuthActions.AUTO_SIGN_IN),
+    map(() => {
+      const userData: {
+        email: string,
+        id: string,
+        _token: string,
+        _tokenExpirationDate: string
+      } = JSON.parse(localStorage.getItem('userData'));
+      if (!userData) {
+        return { type: 'DUMMY' };
+      }
+      const loadedUser = new User(
+        userData.email,
+        userData.id, userData._token,
+        new Date(userData._tokenExpirationDate)
+      );
+      if (loadedUser.token) {
+        // this.user.next(loadedUser);
+        const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+        return new AuthActions.AuthenticateSuccess({
+          email: loadedUser.email,
+          userId: loadedUser.id,
+          token: loadedUser.token,
+          expirationDate: new Date(userData._tokenExpirationDate)
+        });
+        // this.autoSignOut(expirationDuration);
+      }
+      return { type: 'DUMMY' };
+    })
+  )
+
+  @Effect({dispatch: false})
+  authSignOut = this.actions$.pipe(
+    ofType(AuthActions.SIGN_OUT),
+    tap(() => {
+      localStorage.removeItem('userData');
+    })
+  )
 
   // You can add a $ after observables to show it is one.
   constructor(
