@@ -6,7 +6,7 @@ import * as ShoppingListActions from '../../shopping-list/store/shopping-list.ac
 import * as RecipeActions from '../store/recipe.actions';
 import * as fromApp from '../../store/app.reducer';
 import { map, switchMap } from 'rxjs/operators';
-import { state, style, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -21,7 +21,9 @@ import { state, style, trigger } from '@angular/animations';
       state('highlighted', style({
         'background-color': 'blue',
         'transform': 'translatex(100px)'
-      }))
+      })),
+      transition('normal => highlighted', animate(300)),
+      transition('highlighted => normal', animate(800))
     ]) 
   ]
 })
@@ -57,10 +59,6 @@ export class RecipeDetailComponent implements OnInit {
 
   onAnimate() {
     this.state == 'normal' ? this.state = 'highlighted' : this.state = 'normal';
-  }
-
-  onShrink() {
-    this.state == 'highlighted' ? this.state = 'normal' : this.state = 'highlighted';
   }
   
   addToShoppingList() {
