@@ -22,15 +22,34 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
         'background-color': 'blue',
         'transform': 'translatex(100px)'
       })),
+      // transition('normal => highlighted', animate(300)),
+      transition('normal <=> highlighted', animate(300)),
+      // transition('highlighted => normal', animate(800))
+    ]),
+    trigger('wildState', [
+      state('normal', style({
+        'background-color': 'red',
+        'transform': 'translateX(0) scale(1)'
+      })),
+      state('highlighted', style({
+        'background-color': 'blue',
+        'transform': 'translatex(100px)  scale(1)'
+      })),
+      state('shrunken', style({
+        'background-color': 'green',
+        'transform': 'translatex(0px) scale(0.5)'
+      })),
       transition('normal => highlighted', animate(300)),
-      transition('highlighted => normal', animate(800))
-    ]) 
+      transition('highlighted => normal', animate(800)),
+      transition('shrunken <=> *', animate(800))
+    ]),
   ]
 })
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id: number;
   state = 'normal';
+  wildState = 'normal';
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -59,8 +78,13 @@ export class RecipeDetailComponent implements OnInit {
 
   onAnimate() {
     this.state == 'normal' ? this.state = 'highlighted' : this.state = 'normal';
+    this.wildState == 'normal' ? this.wildState = 'highlighted' : this.wildState = 'normal';
   }
   
+  onShrink() {
+    this.wildState = 'shrunken';
+  }
+
   addToShoppingList() {
     this.store.dispatch(new ShoppingListActions.AddIngredients(this.recipe.ingredients));
   }
