@@ -14,6 +14,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { RecipeEffects } from './recipes/store/recipe.effects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Bugfix: You can no longer import RecipesModule here
 // Because it imports it in the routes, it would be a duplicate import which is not allowed.
@@ -30,6 +31,7 @@ import { RecipeEffects } from './recipes/store/recipe.effects';
     EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
     StoreRouterConnectingModule.forRoot(),
+    BrowserAnimationsModule,
     SharedModule,
     CoreModule
   ],
