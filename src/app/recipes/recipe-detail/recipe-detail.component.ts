@@ -41,8 +41,17 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
       })),
       transition('normal => highlighted', animate(300)),
       transition('highlighted => normal', animate(800)),
-      transition('shrunken <=> *', animate(800))
-    ]),
+      transition('shrunken <=> *', [
+        style({
+          'background-color': 'orange',
+          'border-radius': '0px'
+        }),
+        animate(1000, style({
+          'border-radius': '50px'
+        })),
+        animate(500)
+      ])
+    ])
   ]
 })
 export class RecipeDetailComponent implements OnInit {
