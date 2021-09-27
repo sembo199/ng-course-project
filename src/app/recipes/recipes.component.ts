@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { DataStorageService } from '../shared/data-storage.service';
+import { map } from 'rxjs/operators';
+import * as fromApp from '../store/app.reducer';
+import { Recipe } from './recipe.model';
 
 @Component({
   selector: 'app-recipes',
@@ -11,11 +14,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
   recipesSubscription: Subscription;
 
   constructor(
-    private dataStorageService: DataStorageService,
+    private store: Store<fromApp.AppState>,
   ) { }
 
   ngOnInit(): void {
-    this.recipesSubscription = this.dataStorageService.fetchRecipes().subscribe();
+    // Todo: fetch recipes
   }
 
   ngOnDestroy() {
