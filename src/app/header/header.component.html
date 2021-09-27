@@ -15,7 +15,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="isAuthenticated">
-          <a style="cursor: pointer;" (click)="onLogOut()">Sign Out</a>
+          <a class="logout-btn" style="cursor: pointer;" (click)="onLogOut()">Sign Out</a>
         </li>
         <li 
           *ngIf="isAuthenticated"
