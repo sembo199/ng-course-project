@@ -189,6 +189,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     return (<FormArray>this.recipeForm.get('ingredients')).controls;
   }
 
+  animationStarted(event) {
+    console.log(event);
+  }
+  
+  animationEnded(event) {
+    console.log(event);
+  }
+
   ngOnDestroy() {
     if (this.storeSub) {
       this.storeSub.unsubscribe();

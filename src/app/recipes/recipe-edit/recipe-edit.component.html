@@ -53,6 +53,8 @@
           <div 
             class="row" 
             [@list2]
+            (@list2.start)="animationStarted($event)"
+            (@list2.done)="animationEnded($event)"
             style="margin-bottom: 1.5rem;"
             *ngFor="let ingredientControl of controls; let i = index"
             [formGroupName]="i">
