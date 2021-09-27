@@ -52,6 +52,7 @@
           <label>Ingredients</label>
           <div 
             class="row" 
+            [@list1]
             style="margin-bottom: 1.5rem;"
             *ngFor="let ingredientControl of controls; let i = index"
             [formGroupName]="i">

@@ -7,11 +7,32 @@ import * as fromApp from '../../store/app.reducer';
 import * as RecipeActions from '../store/recipe.actions';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
-  styleUrls: ['./recipe-edit.component.css']
+  styleUrls: ['./recipe-edit.component.css'],
+  animations: [
+    trigger('list1', [
+      state('void', style({
+        'opacity': '1',
+        'transform': 'translateX(0)'
+      })),
+      transition('void => *', [
+        style({
+          opacity: '0'
+        }),
+        animate(300)
+      ]),
+      transition('* => void', [
+        animate(300, style({
+          transform: 'translateX(100px)',
+          opacity: 0
+        }))
+      ])
+    ]),
+  ]
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
   id: number;
