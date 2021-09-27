@@ -13,6 +13,7 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
+import { RecipeEffects } from './recipes/store/recipe.effects';
 
 // Bugfix: You can no longer import RecipesModule here
 // Because it imports it in the routes, it would be a duplicate import which is not allowed.
@@ -26,7 +27,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store'
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
     StoreRouterConnectingModule.forRoot(),
     SharedModule,
