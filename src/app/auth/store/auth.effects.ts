@@ -7,6 +7,7 @@ import { of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { User } from "../user.model";
+import { AuthService } from "../auth.service";
 
 export interface AuthResponseData {
   kind?: string;
@@ -74,6 +75,9 @@ export class AuthEffects {
           returnSecureToken: true
         }
       ).pipe(
+        tap(resData => {
+          this.authService.setSignOutTimer(+resData.expiresIn * 1000);
+        }),
         map(resData => {
           return handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
         }),
@@ -96,6 +100,9 @@ export class AuthEffects {
           returnSecureToken: true
         }
       ).pipe(
+        tap(resData => {
+          this.authService.setSignOutTimer(+resData.expiresIn * 1000);
+        }),
         map(resData => {
           return handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
         }),
@@ -108,7 +115,7 @@ export class AuthEffects {
 
   @Effect({dispatch: false})
   authRedirect = this.actions$.pipe(
-    ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.SIGN_OUT),
+    ofType(AuthActions.AUTHENTICATE_SUCCESS),
     tap(() => {
       this.router.navigate(['/']);
     })
@@ -133,15 +140,15 @@ export class AuthEffects {
         new Date(userData._tokenExpirationDate)
       );
       if (loadedUser.token) {
-        // this.user.next(loadedUser);
         const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+        this.authService.setSignOutTimer(expirationDuration);
         return new AuthActions.AuthenticateSuccess({
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
           expirationDate: new Date(userData._tokenExpirationDate)
         });
-        // this.autoSignOut(expirationDuration);
+        
       }
       return { type: 'DUMMY' };
     })
@@ -151,15 +158,18 @@ export class AuthEffects {
   authSignOut = this.actions$.pipe(
     ofType(AuthActions.SIGN_OUT),
     tap(() => {
+      this.authService.clearSignOutTimer();
       localStorage.removeItem('userData');
+      this.router.navigate(['/auth']);
     })
-  )
+  );
 
   // You can add a $ after observables to show it is one.
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   
