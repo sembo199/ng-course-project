@@ -19,7 +19,7 @@ import { state, style, trigger } from '@angular/animations';
         'transform': 'translateX(0)'
       })),
       state('highlighted', style({
-        'background-color': 'green',
+        'background-color': 'blue',
         'transform': 'translatex(100px)'
       }))
     ]) 
@@ -53,6 +53,14 @@ export class RecipeDetailComponent implements OnInit {
         this.router.navigate(['/recipes']);
       }
     });
+  }
+
+  onAnimate() {
+    this.state == 'normal' ? this.state = 'highlighted' : this.state = 'normal';
+  }
+
+  onShrink() {
+    this.state == 'highlighted' ? this.state = 'normal' : this.state = 'highlighted';
   }
   
   addToShoppingList() {
