@@ -24,7 +24,7 @@ const handleAuthentication = (email: string, userId: string, token: string, expi
   const user = new User(email, userId, token, expirationDate);
   localStorage.setItem('userData', JSON.stringify(user));
   // Map automatically returns an observable so no need for of()
-  return new AuthActions.AuthenticateSuccess({email, userId, token, expirationDate});
+  return new AuthActions.AuthenticateSuccess({email, userId, token, expirationDate, redirect: true});
 };
 
 const handleError = (errorRes: any) => {
@@ -116,8 +116,10 @@ export class AuthEffects {
   @Effect({dispatch: false})
   authRedirect = this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/']);
+    tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
+      if (authSuccessAction.payload.redirect) {
+        this.router.navigate(['/']);
+      }
     })
   );
 
@@ -146,7 +148,8 @@ export class AuthEffects {
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
-          expirationDate: new Date(userData._tokenExpirationDate)
+          expirationDate: new Date(userData._tokenExpirationDate),
+          redirect: false
         });
         
       }
